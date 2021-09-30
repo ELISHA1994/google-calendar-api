@@ -1,0 +1,24 @@
+{
+  "name": "google-calendar-node-app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "DEBUG=calendarapi:* node --experimental-modules --es-module-specifier-resolution=node  --trace-warnings ./server.js",
+
+  },
+  "keywords": [],
+  "author": "Elisha Dutse Bello",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "debug": "^4.3.2",
+    "express": "^4.17.1",
+    "google-auth-library": "^7.10.0",
+    "googleapis": "^87.0.0",
+    "morgan": "^1.10.0",
+    "rotating-file-stream": "^2.1.6"
+  }
+}
