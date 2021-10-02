@@ -1,7 +1,6 @@
 import * as http from "http";
 import path from "path";
 import express from "express";
-import { google } from "googleapis";
 import cors from "cors";
 import { default as DBG } from 'debug';
 import { default as logger } from "morgan";
@@ -12,14 +11,8 @@ import * as handlers from "./handlers.js";
 
 const debug = DBG('calendarapi:debug');
 const __dirname = approotdir;
-const { OAuth2 } = google.auth
 
-// const client_id = '38566563514-31qk3qs4q63s71t547sh0icsrmhmvo7r.apps.googleusercontent.com'
-// const client_secret = 'WJotPPX3-ts628OyRU12ov5_'
-// const oAuth2Client = new OAuth2(
-//     client_id,
-//     client_secret
-// );
+
 
 
 // Initialize the express app object
@@ -50,6 +43,7 @@ app.get('/getAuthURL', handlers.getAuthURL)
 app.post('/getToken', handlers.getToken)
 app.post('/getUserInfo', handlers.getUserInfo)
 app.post('/getCalendarEvents', handlers.getCalendarEvents)
+app.post('/getCalendarEvent/:id', handlers.getCalendarEvent)
 
 // error handlers
 // catch 404 and forward to error handler
