@@ -8,13 +8,12 @@ const debug = DBG('calendarapi:debug');
 
 // Google Credentials
 const client_id = credentials.web.client_id;
-const client_secret = credentials.web.client_secret;
 const redirect_uris = credentials.web.redirect_uris
 
 // Create a new instance of oAuth and set our Client ID & Client Secret.
 const oAuth2Client = new google.auth.OAuth2(
     client_id,
-    client_secret,
+    process.env.CLIENT_SECRET,
     redirect_uris[1]
 );
 
@@ -75,12 +74,12 @@ export async function getCalendarEvents(req, res, next) {
 
         const events = await calendar.events.list({
             calendarId: 'primary',
-            timeMax: (new Date()).toISOString(),
-            maxResults: 30,
+            timeMin: (new Date()).toISOString(),
+            // maxResults: 100,
             singleEvents: true,
             orderBy: 'startTime'
         })
-        console.log(events.data.items)
+        // console.log(events.data.items.length);
         res.json(events.data.items);
     } catch (err) {
         next(err);
@@ -100,9 +99,54 @@ export async function getCalendarEvent(req, res, next) {
             calendarId: 'primary',
             eventId: eventId
         });
-        console.log(event.data);
+        // console.log(event.data);
         res.json(event.data);
         // const event
+    } catch (err) {
+        next(err);
+    }
+}
+
+
+export async function updateCalendarEvent(req, res, next) {
+    try {
+        if (req.body.token === null) return res.status(400).json('Token not found');
+        await oAuth2Client.setCredentials(req.body.token);
+
+        // Create a new calender instance.
+        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
+        const eventId = req.params.id;
+
+        const updates = req.body.fields;
+
+        const updatedEvent = await calendar.events.patch({
+            calendarId: 'primary',
+            eventId: eventId,
+            requestBody: {...updates}
+        })
+        // console.log(updatedEvent.data);
+        res.json(updatedEvent.data);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}
+
+export async function deleteCalendarEvent(req, res, next) {
+    try {
+        if (req.body.token === null) return res.status(400).json('Token not found');
+        await oAuth2Client.setCredentials(req.body.token);
+
+        // Create a new calender instance.
+        const calendar = google.calendar({ version: 'v3', auth: oAuth2Client });
+        const eventId = req.params.id;
+
+        await calendar.events.delete({
+            calendarId: 'primary',
+            eventId: eventId,
+        });
+        // console.log(response);
+        res.json({ success: true });
     } catch (err) {
         next(err);
     }

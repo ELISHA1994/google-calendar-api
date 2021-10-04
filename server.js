@@ -44,6 +44,8 @@ app.post('/getToken', handlers.getToken)
 app.post('/getUserInfo', handlers.getUserInfo)
 app.post('/getCalendarEvents', handlers.getCalendarEvents)
 app.post('/getCalendarEvent/:id', handlers.getCalendarEvent)
+app.put('/updateCalendarEvent/:id', handlers.updateCalendarEvent)
+app.post('/deleteCalendarEvent/:id', handlers.deleteCalendarEvent)
 
 // error handlers
 // catch 404 and forward to error handler
